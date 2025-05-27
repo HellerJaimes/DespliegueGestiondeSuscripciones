@@ -1,0 +1,604 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestor de Suscripciones</title>
+
+    <!-- Google Fonts + Font Awesome -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #1e3a8a;
+        --accent: #2563eb;
+        --light: #f8fafc;
+        --dark: #0f172a;
+        --gray: #64748b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #f8fafc, #e0ecff);
+        color: var(--dark);
+        scroll-behavior: smooth;
+      }
+
+      nav {
+        text-align: center;
+        background-color: white;
+        padding: 20px 40px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        display: flex;
+        height: 80px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--gray);
+        margin-left: 20px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 60px 40px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      .hero-text {
+        flex: 1;
+        padding-right: 40px;
+        animation: fadeInLeft 1s ease;
+      }
+
+      .hero-text h1 {
+        font-size: 2.8rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+
+      .hero-text p {
+        font-size: 1.1rem;
+        color: var(--gray);
+        margin-bottom: 30px;
+        line-height: 1.7;
+      }
+
+      .hero-text a.button {
+        display: inline-block;
+        padding: 14px 28px;
+        background-color: var(--accent);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+      }
+
+      .hero-text a.button:hover {
+        background-color: #1d4ed8;
+      }
+
+      .hero-image {
+        flex: 1;
+        text-align: center;
+        animation: fadeInRight 1s ease;
+      }
+
+      .hero-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+      }
+
+      section.features {
+        background: white;
+        padding: 60px 40px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      section.features h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 40px;
+        color: var(--primary);
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+
+      .feature {
+        background-color: var(--light);
+        padding: 30px;
+        border-radius: 16px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature i {
+        font-size: 2rem;
+        color: var(--accent);
+        margin-bottom: 16px;
+      }
+
+      .feature h4 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+      }
+
+      .feature p {
+        font-size: 0.95rem;
+        color: var(--gray);
+        line-height: 1.5;
+      }
+
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .hero-text,
+        .hero-image {
+          padding: 0;
+        }
+
+        .hero-text {
+          margin-bottom: 30px;
+        }
+      }
+      .hr-gradient {
+        border: none;
+        height: 2px;
+        background: linear-gradient(to right, #cfe4ff, hwb(221 66% 0%));
+        margin: 20px 0;
+      }
+      .button {
+        display: inline-block;
+        background-color: var(--accent);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #1d4ed8;
+      }
+      details.feature summary {
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: color 0.3s ease;
+      }
+
+      details.feature p {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease, opacity 0.3s ease;
+        opacity: 0;
+        margin: 0;
+        padding-left: 24px;
+      }
+
+      details[open] p {
+        max-height: 300px;
+        opacity: 1;
+        margin-top: 10px;
+      }
+
+      .icon {
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      details[open] .icon {
+        transform: rotate(360deg);
+      }
+      .icon-small {
+        font-size: 20px !important;
+      }
+
+      .app-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 60px 40px;
+        background: transparent;
+        max-width: 1200px;
+        margin: auto;
+        flex-wrap: wrap;
+      }
+
+      .app-image {
+        flex: 1;
+        animation: fadeInLeft 1s ease forwards;
+        opacity: 0;
+        text-align: center;
+      }
+
+      .app-image img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .app-text {
+        flex: 1;
+        animation: fadeInRight 1s ease forwards;
+        opacity: 0;
+        padding-left: 40px;
+        color: var(--primary);
+      }
+
+      .app-text h2 {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+
+      .app-text p {
+        font-size: 1.1rem;
+        color: var(--gray);
+        line-height: 1.7;
+      }
+
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .app-section {
+          flex-direction: column;
+          text-align: center;
+          padding: 40px 20px;
+        }
+
+        .app-text {
+          padding-left: 0;
+          margin-top: 30px;
+        }
+      }
+    </style>
+  </head>
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+      var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl).show();
+      });
+    });
+  </script>
+  <body>
+    <!-- Navegación -->
+    <nav>
+      <div class="logo">Gestor de Suscripciones</div>
+      <div class="nav-right">
+        <a href="{% url 'quienessomos' %}" class="button">¿Quienes somos?</a>
+        <a href="{% url 'login' %}" class="button">Iniciar Sesión</a>
+      </div>
+    </nav>
+
+    <!-- Hero Principal -->
+    <header>
+      <div class="hero-text">
+        <h1><strong>Tu suscripción, bajo control</strong></h1>
+        <p>
+          Gestiona todas tus suscripciones digitales desde una sola plataforma.
+          Visualiza, edita y recibe notificaciones antes de cada cobro. ¡Nunca
+          más te olvides de una renovación!
+        </p>
+        <a href="{% url 'login' %}" class="button">Iniciar Sesión</a>
+        <a href="{% url 'signup' %}" class="button">Registrarse</a>
+      </div>
+      <div class="hero-image">
+        <img
+          src="https://www.bbva.com/wp-content/uploads/2015/06/trabajo-BBVA.jpg"
+          alt="Dashboard de suscripciones"
+        />
+      </div>
+    </header>
+
+    <!-- Sección de funcionalidades -->
+    <section class="features">
+      <h2><strong>¿Qué ofrecemos?</strong></h2>
+      <hr class="hr-gradient" />
+      <br />
+      <div class="feature-list">
+        <div class="feature">
+          <i class="fas fa-user-shield"></i>
+          <h4>Seguridad de acceso</h4>
+          <p>
+            Autenticación para proteger tus datos personales y tu historial de
+            pagos.
+          </p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-table"></i>
+          <h4>Vista clara</h4>
+          <p>
+            Interfaz organizada que muestra todas tus suscripciones activas y
+            sus próximos vencimientos.
+          </p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-bell"></i>
+          <h4>Notificaciones</h4>
+          <p>
+            Recibe alertas por correo o en la app cuando una suscripción esté
+            por vencerse.
+          </p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-pencil-alt"></i>
+          <h4>Control total</h4>
+          <p>
+            Edita, actualiza o elimina servicios de tu lista en cualquier
+            momento con facilidad.
+          </p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-mobile-alt"></i>
+          <h4>100% Responsive</h4>
+          <p>
+            Diseño adaptable que se ve genial desde tu celular, tablet o
+            computador.
+          </p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-chart-line"></i>
+          <h4>Seguimiento Total</h4>
+          <p>
+            Visualiza tus suscripciones activas, sus fechas y estados con total
+            claridad.
+          </p>
+        </div>
+
+        <!-- Recordatorios Inteligentes -->
+        <div class="feature">
+          <i class="fas fa-bell"></i>
+          <h4>Recordatorios de Pago</h4>
+          <p>
+            Recibe alertas antes de que venza tu próxima suscripción y evita
+            cargos extra.
+          </p>
+        </div>
+
+        <!-- Seguridad de Datos -->
+        <div class="feature">
+          <i class="fas fa-shield-alt"></i>
+          <h4>Privacidad y Seguridad</h4>
+          <p>
+            Tus datos están protegidos con cifrado y buenas prácticas de
+            seguridad.
+          </p>
+        </div>
+      </div>
+    </section>
+    <br />
+    <section class="app-section">
+      <div class="hero-image">
+        <img src="{% static 'img/aplicativo.jpg' %}" alt="Aplicativo" />
+      </div>
+      <div class="app-text">
+        <h1><strong>Gestión inteligente de suscripciones</strong></h1>
+        <p>
+          Nuestra plataforma te permite organizar, monitorear y administrar
+          todas tus suscripciones desde un solo lugar. Visualiza planes activos,
+          recibe recordatorios y mantén el control de tus pagos sin
+          complicaciones.
+        </p>
+        <a href="{% url 'signup' %}" class="button">Pruebalo ahora</a>
+      </div>
+    </section>
+    <br />
+    <section class="features">
+      <h2><strong>Preguntas Frecuentes (FAQs)</strong></h2>
+      <hr class="hr-gradient" />
+      <br />
+      <div class="accordion-list">
+        <details class="feature animated">
+          <summary>
+            <i class="fas fa-question-circle icon icon-small"></i> ¿Qué es el
+            Gestor de Suscripciones?
+          </summary>
+          <p>
+            Es una plataforma que te permite organizar, visualizar y recibir
+            alertas sobre tus suscripciones digitales.
+          </p>
+        </details>
+
+        <details class="feature animated">
+          <summary>
+            <i class="fas fa-user-plus icon icon-small"></i> ¿Necesito crear una
+            cuenta?
+          </summary>
+          <p>
+            Sí, para acceder a todas las funcionalidades como alertas y
+            seguimiento personalizado debes registrarte gratuitamente.
+          </p>
+        </details>
+
+        <details class="feature animated">
+          <summary>
+            <i class="fas fa-lock icon icon-small"></i> ¿Mis datos están
+            seguros?
+          </summary>
+          <p>
+            Sí. Utilizamos cifrado y buenas prácticas para proteger toda tu
+            información personal.
+          </p>
+        </details>
+
+        <details class="feature animated">
+          <summary>
+            <i class="fas fa-credit-card icon icon-small"></i> ¿Puedo agregar
+            mis suscripciones manualmente?
+          </summary>
+          <p>
+            Claro, puedes registrar cualquier servicio al que estés suscrito,
+            indicando su nombre, precio, fecha de cobro y categoria.
+          </p>
+        </details>
+
+        <!-- AUN NO SE HA AGREGADO
+        <details class="feature animated">
+          <summary>
+            <i class="fas fa-envelope-open-text icon icon-small"></i> ¿Cómo
+            funcionan las notificaciones?
+          </summary>
+          <p>
+            Se te enviará un aviso antes del vencimiento de una suscripción, ya
+            sea por correo o en la plataforma.
+          </p>
+        </details>
+-->
+
+        <details class="feature animated">
+          <summary>
+            <i class="fas fa-dollar-sign icon icon-small"></i> ¿Tiene algún
+            costo usar esta plataforma?
+          </summary>
+          <p>
+            No, el uso básico del Gestor de Suscripciones es completamente
+            gratuito.
+          </p>
+        </details>
+      </div>
+    </section>
+    <footer
+      style="
+        text-align: center;
+        padding: 30px 20px;
+        color: var(--gray);
+        font-size: 0.9rem;
+      "
+    >
+      © 2025 Gestor de Suscripciones. Todos los derechos reservados.
+    </footer>
+    <!-- Contenedor de toasts en la esquina superior derecha -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+      {% if messages %} {% for message in messages %}
+      <div
+        class="toast align-items-center text-white bg-success border-0 mb-2"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body">
+            <i class="fas fa-check-circle me-2"></i>
+            <!-- Icono bonito -->
+            {{ message }}
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+  </body>
+</html>

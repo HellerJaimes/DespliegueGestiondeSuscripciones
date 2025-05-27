@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  {% if messages %}
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+    {% for message in messages %}
+    <div class="toast align-items-center text-white bg-success border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <i class="fas fa-check-circle me-2"></i>
+          {{ message }}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="container mt-5">
+    <h3><strong>Bienvenido a tu dashboard!</strong></h3>
+
+    <form method="GET" class="mb-4">
+      <div class="row g-3 align-items-center">
+        <!-- Filtro por categoría -->
+        <div class="col-auto">
+          <label for="filtro_categoria" class="col-form-label"><strong>Filtrar por categoría:</strong></label>
+        </div>
+        <div class="col-auto">
+          <select name="categoria" id="filtro_categoria" class="form-select" onchange="this.form.submit()">
+            <option value="">Todas</option>
+            {% for valor, etiqueta in categorias %}
+              <option value="{{ valor }}" {% if request.GET.categoria == valor %}selected{% endif %}>{{ etiqueta }}</option>
+            {% endfor %}
+          </select>
+        </div>
+    
+        <!-- Filtro por estado -->
+        <div class="col-auto">
+          <label for="filtro_estado" class="col-form-label"><strong>Filtrar por estado:</strong></label>
+        </div>
+        <div class="col-auto">
+          <select name="estado" id="filtro_estado" class="form-select" onchange="this.form.submit()">
+            <option value="">Todos</option>
+            <option value="activo" {% if request.GET.estado == 'activo' %}selected{% endif %}>Activa</option>
+            <option value="inactivo" {% if request.GET.estado == 'inactivo' %}selected{% endif %}>Inactiva</option>
+          </select>
+        </div>
+    
+        <!-- Botones -->
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalAgregar">
+            <i class="bi bi-plus-circle"></i> Agregar nueva Suscripción
+          </button>
+          <a href="{% url 'menu' %}" class="btn btn-success me-2">
+            Ver estadísticas
+          </a>
+        </div>
+      </div>
+    </form>
+
+
+    <!-- Modal de Agregar Suscripción -->
+    <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="modalAgregarLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form method="POST" action="{% url 'agregar_suscripcion' %}" id="formAgregar">
+          {% csrf_token %}
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalAgregarLabel">Agregar Nueva Suscripción</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="servicio" class="form-label">Servicio</label>
+                <input type="text" name="servicio" class="form-control" required />
+              </div>
+              
+              <div class="mb-3">
+                <label for="costo" class="form-label">Costo</label>
+                <input type="number" name="costo" class="form-control" required min="0" max="99999999.99" step="0.01" />
+              </div>
+              <div class="mb-3">
+                <label for="fecha_pago" class="form-label">Fecha de pago</label>
+                <input type="date" name="fecha_pago" class="form-control" required />
+              </div>
+              <div class="mb-3">
+                <label for="categoria" class="form-label">Categoría</label>
+                <select name="categoria" class="form-select" required>
+                  {% for valor, etiqueta in categorias %}
+                  <option value="{{ valor }}">{{ etiqueta }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Agregar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Leyenda de colores -->
+    <h3 class="mt-4"><strong>Suscripciones Recientes</strong></h3>
+    <div class="category-legend mb-4">
+      <div class="item"><span class="swatch sw-ent"></span> Entretenimiento</div>
+      <div class="item"><span class="swatch sw-mus"></span> Música</div>
+      <div class="item"><span class="swatch sw-edu"></span> Educación</div>
+      <div class="item"><span class="swatch sw-otr"></span> Otros</div>
+    </div>
+
+    
+
+    <!-- Tarjetas de suscripciones -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      {% for suscripcion in suscripciones %}
+      <div class="col">
+        <div class="
+          card h-100 shadow-sm subscription-card
+          {% if suscripcion.categoria == 'Entretenimiento' %}
+            cat-entretenimiento
+          {% elif suscripcion.categoria == 'Música' %}
+            cat-musica
+          {% elif suscripcion.categoria == 'Educación' %}
+            cat-educacion
+          {% else %}
+            cat-otros
+          {% endif %}
+        ">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mt-2">{{ suscripcion.servicio }}</h5>
+            <div>
+              {% if suscripcion.activo %}
+              <span class="badge rounded-pill bg-success">
+                <i class="bi bi-check-circle-fill"></i> Activa
+              </span>
+              {% else %}
+              <span class="badge rounded-pill bg-danger">
+                <i class="bi bi-x-circle-fill"></i> Inactiva
+              </span>
+              {% endif %}
+            </div>
+          </div>
+          <hr  style="border-top: 1px solid #d3d3d3;">
+          <br>
+          <p class="card-text mb-1"><strong>Costo:</strong> ${{ suscripcion.costo }}</p>
+          <p class="card-text mb-1"><strong>Fecha de pago:</strong> {{ suscripcion.fecha_pago }}</p>
+          <p class="card-text mb-1"><strong>Meses:</strong> {{ suscripcion.meses }}</p>
+          <p class="card-text mb-3"><strong>Total gastado:</strong> ${{ suscripcion.total_gastado }}</p>
+          <hr  style="border-top: 1px solid #d3d3d3;">
+        </div>
+          <div class="card-footer">
+            <button
+              type="button"
+              style="background-color: #4A90E2; border: 1px solid #4A90E2; color: white;"
+              class="btn btn-warning btn-lg"
+              data-bs-toggle="modal"
+              data-bs-target="#editarModal"
+              data-id="{{ suscripcion.id }}"
+              data-servicio="{{ suscripcion.servicio }}"
+              data-costo="{{ suscripcion.costo }}"
+              data-fecha="{{ suscripcion.fecha_pago|date:'Y-m-d' }}"
+              data-categoria="{{ suscripcion.categoria }}"
+            >
+            ✏ | Editar
+            </button>
+            <form method="POST" action="{% url 'eliminar_suscripcion' suscripcion.id %}" class="form-eliminar">
+              {% csrf_token %}
+              <button type="button" class="btn btn-danger btn-lg btn-eliminar">
+                🗑 | Eliminar
+              </button>
+            </form>
+          </div>
+          <br>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center">No hay suscripciones recientes</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Modal de Edición -->
+    <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <form method="POST" id="formEditar">
+          {% csrf_token %}
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editarModalLabel">Editar Suscripción</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="suscripcion_id" id="editar_id" />
+              <div class="mb-3">
+                <label for="editar_servicio" class="form-label">Servicio</label>
+                <input type="text" class="form-control" name="servicio" id="editar_servicio" required />
+              </div>
+              
+              <div class="mb-3">
+                
+                <label for="editar_costo" class="form-label">Costo</label>
+                <input type="number" class="form-control" name="costo" id="editar_costo" required />
+              </div>
+              <div class="mb-3">
+                <label for="editar_fecha" class="form-label">Fecha de pago</label>
+                <input type="date" class="form-control" name="fecha_pago" id="editar_fecha" required />
+              </div>
+              <div class="mb-3">
+                <label for="editar_categoria" class="form-label">Categoría</label>
+                <select class="form-select" name="categoria" id="editar_categoria" required>
+                  {% for valor, etiqueta in categorias %}
+                  <option value="{{ valor }}">{{ etiqueta }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" name="activo" id="editar_activo">
+                <label class="form-check-label" for="editar_activo">Suscripción activa</label>
+                <div class="mt-1">
+                  <span id="estado_activo_texto" class="badge bg-success">Activa</span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">
+                Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <script src="{% static 'js/suscripciones.js' %}"></script>
+{% endblock %}

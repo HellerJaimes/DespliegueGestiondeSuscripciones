@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}Menú Principal{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+  <h1 class="my-4 text-center text-primary"><strong>¡Hola!</strong></h1>
+  <p class="lead text-center text-dark">Bienvenido a tu área de estadísticas.</p>
+  <div class="alert" role="alert" style="background: linear-gradient(135deg, #5b81a8, #5480a7); padding: 10px 20px; color: white;">
+    Los gráficos de Cantidad por Categoría, Activas vs Inactivas y Gasto Mensual son esenciales para ayudarte a gestionar tus suscripciones y finanzas.
+  </div>
+</div>
+
+  
+
+
+  <!-- GRÁFICOS -->
+  <div class="row mt-5">
+    <div class="col-md-4 mb-4">
+      <div class="chart-container" style="position: relative; height: 300px;">
+        <h5 class="text-center"><strong>Cantidad por Categoría</strong></h5>
+        <canvas id="graficoCategorias"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4 d-flex flex-column align-items-center">
+      <h5 class="text-center"><strong>Activas vs Inactivas</strong></h5>
+      <div class="chart-container" style="position: relative; height: 300px; width: 300px;">
+        <canvas id="graficoEstado"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="chart-container" style="position: relative; height: 300px;">
+        <h5 class="text-center"><strong>Gasto Mensual</strong></h5>
+        <canvas id="graficoGastoMensual"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="alert" role="alert" style="background: linear-gradient(135deg, #5b81a8, #5480a7); padding: 10px 20px; color: white;">
+    <center>El primero te permite identificar en qué áreas estás invirtiendo más, el segundo te ayuda a evaluar qué suscripciones están siendo utilizadas y el tercero te da una visión clara de tus gastos, facilitando un mejor control y decisiones informadas.</center>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-4 mb-3">
+      <a href="{% url 'suscripciones_dashboard' %}" class="btn btn-primary w-100 py-3 fw-bold">
+        Volver al Dashboard
+      </a>
+    </div>
+  </div>
+
+
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Datos para los gráficos -->
+{{ categorias|json_script:"categorias" }}
+{{ totales|json_script:"totales" }}
+{{ activas|json_script:"activas" }}
+{{ inactivas|json_script:"inactivas" }}
+{{ meses|json_script:"meses" }}
+{{ gastos_mensuales|json_script:"gastos_mensuales" }}
+
+<script>
+  // Configuración común para los gráficos
+  const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top', // Leyenda arriba
+        labels: {
+          generateLabels: function(chart) {
+            // Generar etiquetas personalizadas con el color para cada categoría
+            return chart.data.labels.map(function(label, index) {
+              return {
+                text: label, // Nombre de la categoría
+                fillStyle: categoriasColores[label] || '#3b82f6', // Color de la categoría
+                strokeStyle: '#ffffff', // Borde de la leyenda
+                lineWidth: 2 // Grosor del borde
+              };
+            });
+          }
+        }
+      }
+    }
+  };
+
+
+  // Obtener datos
+  const categoriasLabels = JSON.parse(document.getElementById('categorias').textContent);
+  const categoriasTotales = JSON.parse(document.getElementById('totales').textContent);
+  const activas = JSON.parse(document.getElementById('activas').textContent);
+  const inactivas = JSON.parse(document.getElementById('inactivas').textContent);
+  const meses = JSON.parse(document.getElementById('meses').textContent);
+  const gastosMensuales = JSON.parse(document.getElementById('gastos_mensuales').textContent);
+
+  // Colores para las categorías
+  const categoriasColores = {
+    "Música": "#00C389",
+    "Entretenimiento": "#FF4D4D",
+    "Educacion": "#4D4DFF",
+    "Otros": "#0096FF"
+  };
+
+  // Asignar colores a las categorías
+  const coloresCategorias = categoriasLabels.map(categoria => categoriasColores[categoria] || '#4D4DFF'); // Asignar color por defecto si no existe categoría
+
+  // Gráfico de Categorías
+  new Chart(document.getElementById('graficoCategorias'), {
+    type: 'bar',
+    data: {
+      labels: categoriasLabels,
+      datasets: [{
+        label: 'Suscripciones por Categoría',
+        data: categoriasTotales,
+        backgroundColor: coloresCategorias
+      }]
+    },
+    options: commonOptions
+  });
+
+  // Gráfico de Estado
+  new Chart(document.getElementById('graficoEstado'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Activas', 'Inactivas'],
+      datasets: [{
+        data: [activas, inactivas],
+        backgroundColor: ['#1dc22e', '#c21d2e']
+      }]
+    },
+    options: {
+      ...commonOptions,
+      plugins: {
+        legend: {
+          position: 'right'
+        }
+      }
+    }
+  });
+
+  // Nuevo Gráfico de Gasto Mensual sin leyenda
+  new Chart(document.getElementById('graficoGastoMensual'), {
+    type: 'line',
+    data: {
+      labels: meses,
+      datasets: [{
+        label: 'Gasto mensual (COP)',
+        data: gastosMensuales,
+        borderColor: '#3b3eff',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      ...commonOptions,
+      plugins: {
+        legend: {
+          display: false // Eliminar leyenda
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

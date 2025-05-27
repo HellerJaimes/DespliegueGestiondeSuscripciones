@@ -1,0 +1,404 @@
+{% load static %}
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestor de Suscripciones</title>
+
+    <!-- Google Fonts + Font Awesome -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #1e3a8a;
+        --accent: #2563eb;
+        --light: #f8fafc;
+        --dark: #0f172a;
+        --gray: #64748b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #f8fafc, #e0ecff);
+        color: var(--dark);
+        scroll-behavior: smooth;
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      nav {
+        text-align: center;
+        background-color: white;
+        padding: 20px 40px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        height: 80px;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--gray);
+        margin-left: 20px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 60px 40px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      .hero-text {
+        flex: 1;
+        padding-right: 40px;
+      }
+
+      .hero-text h1 {
+        font-size: 2.8rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+
+      .hero-text p {
+        font-size: 1.1rem;
+        color: var(--gray);
+        margin-bottom: 30px;
+        line-height: 1.7;
+      }
+
+      .hero-text a.button {
+        display: inline-block;
+        padding: 14px 28px;
+        background-color: var(--accent);
+        color: white;
+        font-weight: 600;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+      }
+
+      .hero-text a.button:hover {
+        background-color: #1d4ed8;
+      }
+
+      .hero-image {
+        flex: 1;
+        text-align: center;
+      }
+
+      .hero-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+      }
+
+      section.features {
+        background: white;
+        padding: 60px 40px;
+        max-width: 1200px;
+        margin: auto;
+      }
+
+      section.features h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 40px;
+        color: var(--primary);
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+
+      .feature {
+        background-color: var(--light);
+        padding: 30px;
+        border-radius: 16px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature i {
+        font-size: 2rem;
+        color: var(--accent);
+        margin-bottom: 16px;
+      }
+
+      .feature h4 {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+      }
+
+      .feature p {
+        font-size: 0.95rem;
+        color: var(--gray);
+        line-height: 1.5;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      footer {
+        text-align: center;
+        padding: 30px 20px;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+        main {
+        flex: 1;
+    }
+
+
+
+      main,
+      header, 
+      footer,
+      section {
+        opacity: 0;
+        animation: fadeIn 1s ease-out forwards;
+        animation-delay: 0.2s;
+      }
+      .card {
+        opacity: 0;
+        animation: fadeIn 1s ease-out forwards;
+      }
+
+      h5.card-title {
+        color: var(--primary);
+      }
+
+      section.container h2 {
+        color: var(--primary);
+     }
+
+     section h2 {
+        color: var(--primary);
+     }
+      
+      .card:nth-child(1) {
+        animation-delay: 0.5s;
+      }
+
+      .card:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+
+      .card:nth-child(3) {
+        animation-delay: 0.5s;
+      }
+      .button {
+        display: inline-block;
+        background-color: var(--accent);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #1d4ed8;
+      }
+      .profile-img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border: 3px solid var(--accent);
+      }
+    </style>
+  </head>
+<main>
+  <nav>
+    <div class="logo">Gestor de Suscripciones</div>
+    <div class="nav-right">
+      <a href="{% url 'home' %}" class="button">Inicio</a>
+      <a href="{% url 'login' %}" class="button">Iniciar Sesión</a>
+    </div>
+  </nav>
+  <section class="container my-5">
+    <h2 class="text-center mb-4"><strong>¿Quiénes somos?</strong></h2>
+    <p class="text-center mb-5">
+      Somos un equipo de tres estudiantes apasionados por la ingeniería de
+      software. Juntos combinamos nuestras fortalezas para desarrollar
+      soluciones prácticas, intuitivas y bien estructuradas, como este gestor de
+      suscripciones.
+    </p>
+
+    <div class="row text-center">
+      <!-- Heller -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0 p-3">
+          <img
+            src="{% static 'img/hellerJaimes.jpg' %}"
+            alt="Heller Andrés"
+            class="profile-img mb-3 mx-auto"
+          />
+          <h5 class="card-title">
+            <strong>Heller Andrés Jaimes Gelvez</strong>
+          </h5>
+          <p class="card-text">
+            Apasionado por el back-end, se encarga de construir la lógica
+            que da vida a nuestras aplicaciones. Le apasiona crear sistemas
+            robustos, seguros y eficientes. Si algo funciona bien por dentro,
+            pasó por sus manos.
+        </p>
+        <div class="social-buttons mt-3 d-flex justify-content-center gap-3">
+          <a
+            href="https://github.com/HellerJaimes"
+            class="btn btn-outline-dark rounded-pill"
+            target="_blank"
+          >
+            <i class="fab fa-github me-2"></i>GitHub
+          </a>
+          <a
+            href="https://www.instagram.com/gelvez.andres/"
+            class="btn btn-outline-primary rounded-pill"
+            target="_blank"
+          >
+            <i class="fab fa-instagram me-2"></i>Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+
+      <!-- William -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0 p-3">
+          <img
+            src="{% static 'img/williamVega.jpg' %}"
+            alt=""
+            class="profile-img mb-3 mx-auto"
+          />
+          <h5 class="card-title">
+            <strong>William Felipe Melgarejo Vega</strong>
+          </h5>
+          <p class="card-text">
+            Apasionado del front-end, se enfoca en la experiencia del
+            usuario y en que cada detalle visual se sienta moderno y funcional.
+            Le gusta construir interfaces limpias, responsivas y agradables para
+            cualquier tipo de usuario.
+          </p>
+          <div class="social-buttons mt-3 d-flex justify-content-center gap-3">
+            <a
+              href="https://github.com/wllmvg"
+              class="btn btn-outline-dark rounded-pill"
+              target="_blank"
+            >
+              <i class="fab fa-github me-2"></i>GitHub
+            </a>
+            <a
+              href="https://www.instagram.com/wllmvg.rar/"
+              class="btn btn-outline-primary rounded-pill"
+              target="_blank"
+            >
+              <i class="fab fa-instagram me-2"></i>Instagram
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ángel -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0 p-3">
+          <img
+            src="{% static 'img/angelInfante.jpg' %}"
+            alt="Ángel David"
+            class="profile-img mb-3 mx-auto"
+          />
+          <h5 class="card-title">
+            <strong>Ángel David Infante Espinel</strong>
+          </h5>
+          <p class="card-text">
+            Su fuerte es el back-end, se destaca por su lógica
+            estructurada y su enfoque en bases de datos. Su habilidad
+            para conectar piezas y optimizar procesos hace que todo fluya de
+            manera eficiente.
+        </p>
+        <div class="social-buttons mt-3 d-flex justify-content-center gap-3">
+          <a
+            href="https://github.com/Angel-23-I"
+            class="btn btn-outline-dark rounded-pill"
+            target="_blank"
+          >
+            <i class="fab fa-github me-2"></i>GitHub
+          </a>
+          <a
+            href="https://www.instagram.com/_angel23_06_/"
+            class="btn btn-outline-primary rounded-pill"
+            target="_blank"
+          >
+            <i class="fab fa-instagram me-2"></i>Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div style="text-align: center; margin-bottom: 20px;">
+    <p style="text-align: center;
+    color: var(--gray);
+    font-size: 0.9rem;">Integrantes de:</p>
+    <a href="https://bucaramanga.udes.edu.co/estudia/pregrados/ingenieria-de-software" target="_blank" style="text-decoration: none;">
+        <img src="{% static 'img/udesLogo.jpg' %}" alt="Logo UDES" style="width: 200px; height: auto;">
+      </a>
+  </div>
+</main>
+    <footer>
+    © 2025 Gestor de Suscripciones. Todos los derechos reservados.
+    </footer>
+</html>

@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Env
+.env
+*.env
+firebaseconfig.py
+
+# Django
+db.sqlite3
+/staticfiles
+/media
+*.log
+
+# VSCode
+.vscode/
+
+# Node (si usas npm en algún lado)
+node_modules/
